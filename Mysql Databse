@@ -2155,3 +2155,636 @@ MariaDB [mytestdb]> SELECT * from manufacturers as m LEFT JOIN products as p ON 
 10 rows in set (0.02 sec)
 
 
+==================================================14 Sep==============================================================================
+
+Setting environment for using XAMPP for Windows.
+Abdeali@DESKTOP-ACDK2PF c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 2
+Server version: 10.1.26-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use MyTestDb;
+Database changed
+MariaDB [MyTestDb]> show tables;
++--------------------+
+| Tables_in_mytestdb |
++--------------------+
+| manufacturers      |
+| pet                |
+| pieces             |
+| products           |
+| providers          |
+| provides           |
+| student            |
++--------------------+
+7 rows in set (0.11 sec)
+
+MariaDB [MyTestDb]> select * from Pieces;select * from Providers;select * from provides;
++------+----------+
+| Code | Name     |
++------+----------+
+|    1 | Sprocket |
+|    2 | Screw    |
+|    3 | Nut      |
+|    4 | Bolt     |
++------+----------+
+4 rows in set (0.10 sec)
+
++------+----------------------+
+| Code | Name                 |
++------+----------------------+
+| HAL  | Clarke Enterprises   |
+| RBT  | Susan Calvin Corp.   |
+| TNBC | Skellington Supplies |
++------+----------------------+
+3 rows in set (0.05 sec)
+
++------+-------+----------+-------+
+| Code | Piece | Provider | Price |
++------+-------+----------+-------+
+|    1 |     1 | HAL      | 10.00 |
+|    2 |     1 | RBT      | 15.00 |
+|    3 |     2 | HAL      | 20.00 |
+|    4 |     2 | RBT      | 15.00 |
+|    5 |     2 | TNBC     | 14.00 |
+|    6 |     3 | RBT      | 50.00 |
+|    7 |     3 | TNBC     | 45.00 |
+|    8 |     4 | HAL      |  5.00 |
+|    9 |     4 | RBT      |  7.00 |
++------+-------+----------+-------+
+9 rows in set (0.06 sec)
+
+MariaDB [MyTestDb]> CREATE TABLE [dbo].[Company](
+    -> [Id] [int] IDENTITY(1,1) NOT NULL,
+    -> [Name] [varchar](50) NULL,
+    -> [BusinessNumber] [varchar](50) NULL,
+    -> [Email] [varchar](255) NULL
+    -> ) ON [PRIMARY];
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '[dbo].[Company](
+[Id] [int] IDENTITY(1,1) NOT NULL,
+[Name] [varchar](50) NULL,
+[' at line 1
+MariaDB [MyTestDb]> CREATE TABLE [dbo].[Company](
+    -> [Id] [int] IDENTITY(1,1) NOT NULL,
+    -> [Name] [varchar](50) NULL,
+    -> [BusinessNumber] [varchar](50) NULL,
+    -> [Email] [varchar](255) NULL
+    -> [Email] [varchar](255) NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '[dbo].[Company](
+[Id] [int] IDENTITY(1,1) NOT NULL,
+[Name] [varchar](50) NULL,
+[' at line 1
+MariaDB [MyTestDb]> select CREATE TABLE [dbo].[Company](
+    -> [Id] [int] IDENTITY(1,1) NOT NULL,
+    -> [Name] [varchar](50) NULL,
+    -> [BusinessNumber] [varchar](50) NULL,
+    -> [Email] [varchar](255) NULL
+    -> ) ON [PRIMARY];
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'CREATE TABLE [dbo].[Company](
+[Id] [int] IDENTITY(1,1) NOT NULL,
+[Name] [varchar' at line 1
+MariaDB [MyTestDb]> Select * from pieces;
++------+----------+
+| Code | Name     |
++------+----------+
+|    1 | Sprocket |
+|    2 | Screw    |
+|    3 | Nut      |
+|    4 | Bolt     |
++------+----------+
+4 rows in set (0.00 sec)
+
+MariaDB [MyTestDb]> Select * from Providers;
++------+----------------------+
+| Code | Name                 |
++------+----------------------+
+| HAL  | Clarke Enterprises   |
+| RBT  | Susan Calvin Corp.   |
+| TNBC | Skellington Supplies |
++------+----------------------+
+3 rows in set (0.00 sec)
+
+MariaDB [MyTestDb]> Select * from Provides;
++------+-------+----------+-------+
+| Code | Piece | Provider | Price |
++------+-------+----------+-------+
+|    1 |     1 | HAL      | 10.00 |
+|    2 |     1 | RBT      | 15.00 |
+|    3 |     2 | HAL      | 20.00 |
+|    4 |     2 | RBT      | 15.00 |
+|    5 |     2 | TNBC     | 14.00 |
+|    6 |     3 | RBT      | 50.00 |
+|    7 |     3 | TNBC     | 45.00 |
+|    8 |     4 | HAL      |  5.00 |
+|    9 |     4 | RBT      |  7.00 |
++------+-------+----------+-------+
+9 rows in set (0.00 sec)
+
+MariaDB [MyTestDb]> Select Pieces from provides where provider='HAL';
+ERROR 1054 (42S22): Unknown column 'Pieces' in 'field list'
+MariaDB [MyTestDb]> Select Name from Pieces where Code in (Select Piece from provides where provider='HAL');
++----------+
+| Name     |
++----------+
+| Sprocket |
+| Screw    |
+| Bolt     |
++----------+
+3 rows in set (0.10 sec)
+
+MariaDB [MyTestDb]> Select Code, Name from Pieces where Code in (Select Piece from provides where provider='HAL');
++------+----------+
+| Code | Name     |
++------+----------+
+|    1 | Sprocket |
+|    2 | Screw    |
+|    4 | Bolt     |
++------+----------+
+3 rows in set (0.00 sec)
+
+MariaDB [MyTestDb]> Insert into provides (Piece,Provider,Price) values (1,'TNBC', 7);
+Query OK, 1 row affected (0.14 sec)
+
+MariaDB [MyTestDb]> SELECT Name  FROM Pieces  WHERE EXISTS  (    SELECT * FROM Provides      WHERE Provider = 'HAL'        AND Piece = Pieces.Code  );
++----------+
+| Name     |
++----------+
+| Sprocket |
+| Screw    |
+| Bolt     |
++----------+
+3 rows in set (0.03 sec)
+
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Auto_Increment Primary Not NUll,
+    -> Name varchar(50) NOT NULL
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Not NUll,
+Name varchar(50) NOT NULL
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Auto_Increment Primary Not NUll,
+    -> Name varchar(50) NOT NULL
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Not NUll,
+Name varchar(50) NOT NULL
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Auto_Increment Primary ,
+    -> Name varchar(50) NOT NULL
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '
+Name varchar(50) NOT NULL
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Auto_Increment Primary ,
+    -> Name varchar(50) NOT NULL
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '
+Name varchar(50) NOT NULL
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Auto_Increment Primary ,
+    -> Name varchar(50) NOT NULL
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '
+Name varchar(50) NOT NULL
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Auto_Increment Primary ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );Create Table Client
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> clear
+MariaDB [MyTestDb]> ;
+ERROR: No query specified
+
+MariaDB [MyTestDb]> clear;
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int(5) Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int(5) Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]> exit
+Bye
+
+Abdeali@DESKTOP-ACDK2PF c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 3
+Server version: 10.1.26-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use database MyTestDb;
+ERROR 1049 (42000): Unknown database 'database'
+MariaDB [(none)]> use MyTestDb;
+Database changed
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int(5) Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int(5) Primary Auto_Increment  ,
+    -> Name varchar(50) Not Null
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Auto_Increment  ,
+Name varchar(50) Not Null
+)' at line 3
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int(5) Auto_Increment  ,
+    -> Name varchar(50) Not Null,
+    -> Primary (AccountNumber)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(AccountNumber)
+)' at line 5
+MariaDB [MyTestDb]> Create Table Client
+    -> (
+    -> AccountNumber int(5) Auto_Increment  ,
+    -> Name varchar(50) Not Null,
+    -> Primary Key (AccountNumber)
+    -> );
+Query OK, 0 rows affected (0.25 sec)
+
+MariaDB [MyTestDb]> Create Table Employee
+    -> (
+    -> EmployeeId int Auto_Increment Primary Key Not NUll,
+    -> Name varchar(50) NOT NULL,
+    -> Position varchar(50) NOT NULL,
+    -> Salary varchar(50) NOT NULL,
+    -> Remarks varchar(50) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.20 sec)
+
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Planet
+    -> (
+    -> PlanetId int Auto_Increment Primary Key Not NUll,
+    -> Name varchar(50) NOT NULL,
+    -> Coordinate double NOT NULL
+    -> );
+Query OK, 0 rows affected (0.34 sec)
+
+MariaDB [MyTestDb]> Create Table Shipment
+    -> (
+    -> ShipmentId int Auto_Increment Primary Not NUll,
+    -> ShipmentDate date ,
+    -> Manager int,
+    -> Planet int,
+    -> Foreign Key (Manager) REFRENCES Employee(EmployeeId),
+    -> Foreign Key (Planet) REFRENCES Planet(PlanetId)
+    ->
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Not NUll,
+ShipmentDate date ,
+Manager int,
+Planet int,
+Foreign Key (Manager) REF' at line 3
+MariaDB [MyTestDb]> Create Table Shipment
+    -> (
+    -> ShipmentId int Auto_Increment Primary Key Not NUll,
+    -> ShipmentDate date ,
+    -> Manager int,
+    -> Planet int,
+    -> Foreign Key (Manager) REFRENCES Employee(EmployeeId),
+    -> Foreign Key (Planet) REFRENCES Planet(PlanetId)
+    ->
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'REFRENCES Employee(EmployeeId),
+Foreign Key (Planet) REFRENCES Planet(PlanetId)
+' at line 7
+MariaDB [MyTestDb]> Create Table Shipment
+    -> (
+    -> ShipmentId int Auto_Increment Primary Key Not NUll,
+    -> ShipmentDate date ,
+    -> Manager int,
+    -> PlanetId int,
+    -> Foreign Key (Manager) REFRENCES Employee(EmployeeId),
+    -> Foreign Key (PlanetId) REFRENCES Planet(PlanetId)
+    ->
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'REFRENCES Employee(EmployeeId),
+Foreign Key (PlanetId) REFRENCES Planet(PlanetId' at line 7
+MariaDB [MyTestDb]> Create Table Shipment
+    -> (
+    -> ShipmentId int Auto_Increment Primary Key Not NUll,
+    -> ShipmentDate date ,
+    -> Manager int,
+    -> PlanetId int,
+    -> Foreign Key (Manager) REFRENCES Employee(EmployeeId),
+    -> Foreign Key (PlanetId) REFRENCES Planet(PlanetId)
+    ->
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'REFRENCES Employee(EmployeeId),
+Foreign Key (PlanetId) REFRENCES Planet(PlanetId' at line 7
+MariaDB [MyTestDb]> Create Table Shipment
+    -> (
+    -> ShipmentId int Auto_Increment Primary Key Not NUll,
+    -> ShipmentDate date ,
+    -> Manager int,
+    -> PlanetId int,
+    -> Foreign Key (Manager) REFERENCES Employee(EmployeeId),
+    -> Foreign Key (PlanetId) REFERENCES Planet(PlanetId)
+    ->
+    -> );
+Query OK, 0 rows affected (0.15 sec)
+
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Auto_Increment Not NUll,
+    -> Shipment int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (Shipment) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary(Shipment,PackageNumber)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(Shipment,PackageNumber)
+)' at line 12
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Auto_Increment Not NUll,
+    -> Shipment int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (Shipment) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(Shipment,PackageNumber)
+    -> );
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+MariaDB [MyTestDb]>
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> Shipment int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (Shipment) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(Shipment,PackageNumber)
+    -> );
+ERROR 1005 (HY000): Can't create table `mytestdb`.`package` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(Shipment,PackageNumber)
+    -> );
+ERROR 1072 (42000): Key column 'Shipment' doesn't exist in table
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(Shipment,PackageNumber)
+    -> );
+ERROR 1072 (42000): Key column 'Shipment' doesn't exist in table
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(ShipmentId,PackageNumber)
+    -> );
+ERROR 1005 (HY000): Can't create table `mytestdb`.`package` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(ShipmentId,PackageNumber)
+    -> );
+ERROR 1005 (HY000): Can't create table `mytestdb`.`package` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Primary KEy(ShipmentId,PackageNumber),
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber)
+    ->
+    -> );
+ERROR 1005 (HY000): Can't create table `mytestdb`.`package` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [MyTestDb]> CREATE TABLE Package (
+    ->   Shipment INTEGER NOT NULL
+    ->     CONSTRAINT fk_Shipment_ShipmentID REFERENCES Shipment(ShipmentID),
+    ->   PackageNumber INTEGER NOT NULL,
+    ->   Contents TEXT NOT NULL,
+    ->   Weight REAL NOT NULL,
+    ->   Sender INTEGER NOT NULL
+    ->     CONSTRAINT fk_Client_AccountNumber REFERENCES Client(AccountNumber),
+    ->   Recipient INTEGER NOT NULL
+    ->     CONSTRAINT fk_Client_AccountNumber REFERENCES Client(AccountNumber),
+    ->   PRIMARY KEY(Shipment, PackageNumber)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'CONSTRAINT fk_Shipment_ShipmentID REFERENCES Shipment(ShipmentID),
+  PackageNumb' at line 3
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int NOT NULL,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(ShipmentId,PackageNumber)
+    ->
+    -> );
+ERROR 1005 (HY000): Can't create table `mytestdb`.`package` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int ,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Planet(AccountNumber),
+    -> Primary KEy(ShipmentId,PackageNumber)
+    ->
+    -> );
+ERROR 1005 (HY000): Can't create table `mytestdb`.`package` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [MyTestDb]> Create Table Package
+    -> (
+    -> PackageNumber int Not NUll,
+    -> ShipmentId int ,
+    -> Contents varchar(50) NOT NULL,
+    -> Weight double ,
+    -> Sender int NOT NULL,
+    -> Recipient int NOT NULL,
+    -> Foreign Key (ShipmentId) REFERENCES Shipment(ShipmentId),
+    -> Foreign Key (Sender) REFERENCES Client(AccountNumber),
+    -> Foreign Key (Recipient) REFERENCES Client(AccountNumber),
+    -> Primary KEy(ShipmentId,PackageNumber)
+    ->
+    -> );
+Query OK, 0 rows affected (0.20 sec)
+
+MariaDB [MyTestDb]>
